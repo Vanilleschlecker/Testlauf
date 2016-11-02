@@ -4,15 +4,35 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "projekt";
+$dbname = "projekttt";
 
 // Create connection
 
 $mysqli = new mysqli($servername, $username, $password, $dbname, 3306);
 if($mysqli->connect_errno)
 {
+$mysqli = new mysqli($servername, $username, $password);
 echo 'Datenbankverbindung fehlerhaft!';
+$mysqli->query("CREATE DATABASE ".$dbname);
+$mysqli = new mysqli($servername, $username, $password, $dbname, 3306);
+$mysqli->multi_query("CREATE TABLE `information` (
+  `id` int(11) NOT NULL,
+  `datum` date NOT NULL,
+  `stockwerk` varchar(255) NOT NULL,
+  `gegenstand` varchar(255) NOT NULL,
+  `wert` float NOT NULL,
+  `erledigtbis` varchar(255) NOT NULL,
+  `kurzbeschreib` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;INSERT INTO `information` (`id`, `datum`, `stockwerk`, `gegenstand`, `wert`, `erledigtbis`, `kurzbeschreib`) VALUES
+(2, '2000-04-25', '4', 'Tuere', 8450, '2001-05-28', 'Die TÃƒÂ¼r geht nicht mehr zu'),
+(4, '2016-08-25', '5', 'Fassade', 5004, '2018-02-25', 'Fassade ist nicht mehr schÃƒÂ¶n'),
+(5, '2017-02-25', '5', 'Dach', 8450, '2018-01-25', 'Dach ist kaputt');");
+print_r($mysqli);
+echo "<form action='datenbank.php'><button>Neu aktualisieren</button>";
 exit;
+}
+else {
+
 }
 
 if(isset($_GET['logout']))
@@ -33,12 +53,13 @@ if(isset($_GET['logout']))
   <script src="delete.js"></script>
   <link href="style.css" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Coiny|Syncopate" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
   <?php
-  $sql = $mysqli->query("SELECT * FROM information");
+  $sql = $mysqli->query("SELECT * FROM information WHERE erledigtbis ");
 
   echo "<table id='table' class='table table-striped table-hover'>";
   echo "<tr>";
